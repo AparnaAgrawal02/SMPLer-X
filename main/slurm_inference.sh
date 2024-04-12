@@ -2,8 +2,9 @@
 set -x
 
 PARTITION=Zoetrope
-
-INPUT_VIDEO=$1
+INPUT_VIDEO1=$1
+INPUT_VIDEO=$(basename $INPUT_VIDEO1 .mp4) 
+#echo $INPUT_VIDEO
 FORMAT=$2
 FPS=$3
 CKPT=$4
@@ -15,28 +16,28 @@ GPUS_PER_NODE=$((${GPUS}<8?${GPUS}:8))
 CPUS_PER_TASK=4 # ${CPUS_PER_TASK:-2}
 SRUN_ARGS=${SRUN_ARGS:-""}
 
-IMG_PATH=../demo/images/${INPUT_VIDEO}
-SAVE_DIR=../demo/results/${INPUT_VIDEO}
+IMG_PATH=/scratch/aparna/demo/images/${INPUT_VIDEO}
+SAVE_DIR=/scratch/aparna/demo/results/${INPUT_VIDEO}
 
 # video to images
 mkdir $IMG_PATH
 mkdir $SAVE_DIR
-ffmpeg -i ../demo/videos/${INPUT_VIDEO}.${FORMAT} -f image2 -vf fps=${FPS}/1 -qscale 0 ../demo/images/${INPUT_VIDEO}/%06d.jpg 
+ffmpeg -i ${INPUT_VIDEO1} -f image2 -vf fps=${FPS}/1 -qscale 0 /scratch/aparna/demo/images/${INPUT_VIDEO}/%06d.jpg 
 
 end_count=$(find "$IMG_PATH" -type f | wc -l)
 echo $end_count
 
 # inference
-PYTHONPATH="$(dirname $0)/..":$PYTHONPATH \
-srun -p ${PARTITION} \
-    --job-name=${JOB_NAME} \
-    --gres=gpu:${GPUS_PER_NODE} \
-    --ntasks=${GPUS} \
-    --ntasks-per-node=${GPUS_PER_NODE} \
-    --cpus-per-task=${CPUS_PER_TASK} \
-    --kill-on-bad-exit=1 \
-    ${SRUN_ARGS} \
-    python inference.py \
+#PYTHONPATH="$(dirname $0)/..":$PYTHONPATH \
+#srun -p ${PARTITION} \
+#    --job-name=${JOB_NAME} \
+#    --gres=gpu:${GPUS_PER_NODE} \
+#    --ntasks=${GPUS} \
+#    --ntasks-per-node=${GPUS_PER_NODE} \
+#    --cpus-per-task=${CPUS_PER_TASK} \
+#    --kill-on-bad-exit=1 \
+#    ${SRUN_ARGS} \
+python inference.py \
     --num_gpus ${GPUS_PER_NODE} \
     --exp_name output/demo_${JOB_NAME} \
     --pretrained_model ${CKPT} \
@@ -54,4 +55,4 @@ srun -p ${PARTITION} \
 
 
 # images to video
-ffmpeg -y -f image2 -r ${FPS} -i ${SAVE_DIR}/img/%06d.jpg -vcodec mjpeg -qscale 0 -pix_fmt yuv420p ../demo/results/${INPUT_VIDEO}.mp4
+ffmpeg -y -f image2 -r ${FPS} -i ${SAVE_DIR}/img/%06d.jpg -vcodec mjpeg -qscale 0 -pix_fmt yuv420p /scratch/aparna/demo/results/${INPUT_VIDEO}.mp4

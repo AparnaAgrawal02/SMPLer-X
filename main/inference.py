@@ -72,7 +72,7 @@ def main():
 
     for frame in tqdm(range(start, end)):
         img_path = os.path.join(args.img_path, f'{int(frame):06d}.jpg')
-
+        
         # prepare input image
         transform = transforms.ToTensor()
         original_img = load_img(img_path)
