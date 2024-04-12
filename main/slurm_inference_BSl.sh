@@ -21,16 +21,16 @@ parent_dir=$(dirname -- "$INPUT_VIDEO1")
 base_parent=$(basename -- "$parent_dir")
 # mkdir ../demo/ASL/images
 # mkdir ../demo/ASL/results
-mkdir ../demo/BSL/images$($base_parent)
-mkdir ../demo/BSL/results$($base_parent)
+mkdir /scratch/aparna/demo/BSL/images/$base_parent
+mkdir /scratch/aparna/demo/BSL/results/$base_parent
 
-IMG_PATH=../demo/BSL/images/$($base_parent)/${INPUT_VIDEO}
-SAVE_DIR=../demo/BSL/results/$($base_parent)/${INPUT_VIDEO}
+IMG_PATH=/scratch/aparna/demo/BSL/images/$base_parent/${INPUT_VIDEO}
+SAVE_DIR=/scratch/aparna/demo/BSL/results/$base_parent/${INPUT_VIDEO}
 
 # video to images
 mkdir $IMG_PATH
 mkdir $SAVE_DIR
-ffmpeg -i ${INPUT_VIDEO1} -f image2 -vf fps=${FPS}/1 -qscale 0 ../demo/BSL/images/$($base_parent)/${INPUT_VIDEO}/%06d.jpg 
+ffmpeg -i ${INPUT_VIDEO1} -f image2 -vf fps=${FPS}/1 -qscale 0 /scratch/aparna/demo/BSL/images/$base_parent/${INPUT_VIDEO}/%06d.jpg 
 
 # end_count=$(find "$IMG_PATH" -type f | wc -l)
 # echo $end_count

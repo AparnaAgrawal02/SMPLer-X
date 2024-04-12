@@ -67,10 +67,12 @@ def main():
     config_file= '../pretrained_models/mmdet/mmdet_faster_rcnn_r50_fpn_coco.py'
     model = init_detector(config_file, checkpoint_file, device='cuda:0')  # or device='cuda:0'
     output_folder1 = args.output_folder
-    for folder in os.listdir(args.path):
+    folders = os.listdir(args.path)
+    folders.sort()[::-1]
+    for folder in folders:
         for file in os.listdir(os.path.join(args.path, folder)):
             print(file)
-            file_name = file
+            file_name = file.split(".")[0]
             parent = folder
             print(folder)
             
@@ -201,7 +203,6 @@ def main():
                 save_path_img = os.path.join(args.output_folder, 'img')
                 os.makedirs(save_path_img, exist_ok= True)
                 cv2.imwrite(os.path.join(save_path_img, f'{frame_name}'), vis_img[:, :, ::-1])
-
-
+            #break
 if __name__ == "__main__":
     main()

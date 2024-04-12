@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH -A aparna
 #SBATCH -c 10
-#SBATCH -w gnode075
+#SBATCH -w gnode092
 #SBATCH --gres=gpu:1
 #SBATCH --mem-per-cpu=2G
 #SBATCH --time=10-00:00:00
@@ -13,7 +13,7 @@
 #tar -xf /scratch/aparna/vox2_train_val.tar /scratch/aparna/     --checkpoint=.10000  
 #mkdir /scratch/aparna
 #rsync -r aparna@ada.iiit.ac.in:/share3/dataset/VoxCeleb2_dev_test/vox2_train_val.tar /scratch/aparna  --progress --ignore-existing
-directory="/scratch/aparna/BSL"
+directory="/ssd_scratch/cvit/aparna/BSL"
 #for folder in $directory/* ; do 
 #	echo $folder
 #	for filename in $folder/* ; do
@@ -25,6 +25,6 @@ for folder in $directory/* ; do
         echo $folder
         for filename in $folder/* ; do
                 echo $filename  $folder
-                 sh slurm_inference_BSL.sh  $filename  mp4 24 smpler_x_l32
+                 sh slurm_inference_BSl.sh  $filename  mp4 24 smpler_x_l32
         done
 done

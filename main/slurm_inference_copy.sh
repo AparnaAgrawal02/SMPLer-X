@@ -4,7 +4,7 @@ set -x
 PARTITION=Zoetrope
 
 INPUT_VIDEO1=$1
-INPUT_VIDEO=$(basename $INPUT_VIDEO1) 
+INPUT_VIDEO=$(basename $INPUT_VIDEO1 .mp4) 
 #echo $INPUT_VIDEO
 FORMAT=$2
 FPS=$3
@@ -33,7 +33,7 @@ echo $SAVE_DIR
 	if [ ! -d  $IMG_PATH ]; then
 		mkdir $IMG_PATH
 		mkdir $SAVE_DIR
-		ffmpeg -i ${INPUT_VIDEO1} -f image2 -vf fps=${FPS}/1 -qscale 0 /scratch/aparna/demo/ASL/images/$($base_parent)/${INPUT_VIDEO}/%06d.jpg 
+		ffmpeg -i ${INPUT_VIDEO1} -f image2 -vf fps=${FPS}/1 -qscale 0 /scratch/aparna/demo/ASL/images/$base_parent/${INPUT_VIDEO}/%06d.jpg 
 fi
 # end_count=$(find "$IMG_PATH" -type f | wc -l)
 # echo $end_count
